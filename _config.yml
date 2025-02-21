@@ -18,17 +18,17 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: ItaliaCandele - Candele Profumate di Qualità
-email: info@italiacandele.com
-description: "ItaliaCandele è il tuo negozio online per candele profumate, artigianali e di alta qualità. Scopri fragranze uniche per ogni ambiente e momento della giornata."
-keywords: "ItaliaCandele, candele profumate, candele artigianali, fragranze, ambiente accogliente, regali"
+title: MyOroscope - Candele Profumate di Qualità
+email: info@MyOroscope.com
+description: "MyOroscope è il tuo negozio online per candele profumate, artigianali e di alta qualità. Scopri fragranze uniche per ogni ambiente e momento della giornata."
+keywords: "MyOroscope, candele profumate, candele artigianali, fragranze, ambiente accogliente, regali"
 author: "Antonio Trento"
-og_image: "ItaliaCandele-og-image.jpg"  # Immagine da utilizzare per Open Graph e Twitter Cards
+og_image: "MyOroscope-og-image.jpg"  # Immagine da utilizzare per Open Graph e Twitter Cards
 locale: "it_IT"
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://italiacandele.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: ItaliaCandele
-github_username:  ItaliaCandele
+url: "https://my-oroscope.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: MyOroscope
+github_username:  MyOroscope
 snipchart: YWFiZDYzMzYtZjY3MC00ZDliLTgwNWUtMGFlY2IyOWQ0Y2Q2NjM2NDcxMTc3NTMxNjE4MDUw
 
 collections:

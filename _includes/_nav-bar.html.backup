@@ -7,7 +7,7 @@
                 <i class="fas fa-phone-alt me-2"></i>
                 <span>XXXX XXX XXXX</span>
                 <i class="fas fa-envelope me-2 ms-3"></i>
-                <a href="mailto:info@italiacandele.com" class="text-white text-decoration-none">info@italiacandele.com</a>
+                <a href="mailto:info@MyOroscope.com" class="text-white text-decoration-none">info@MyOroscope.com</a>
             </div>
 
             <!-- Schede con link a destra -->
@@ -15,7 +15,7 @@
                 <!-- Scheda selezionata con la classe 'active' -->
                 <div class="card border border-secondary text-white active" style="width: auto; background: transparent;">
                     <div class="card-body">
-                        <a href="/" class="text-white text-decoration-none">ItaliaCandele</a>
+                        <a href="/" class="text-white text-decoration-none">MyOroscope</a>
                     </div>
                 </div>
                 <!-- Scheda non selezionata -->
@@ -33,12 +33,12 @@
 
 
 
-!-- NAVBAR HOME ItaliaCandele -->
+!-- NAVBAR HOME MyOroscope -->
 <nav class="navbar navbar-expand-lg" aria-label="Ninth navbar example">
     <div class="container-xl">
         <!-- Logo -->
         <a class="navbar-brand" href="#">
-            <img src="{{ site.baseurl }}/assets/images/qwiereless-logo.svg" alt="ItaliaCandele Logo" class="navbar-logo" />
+            <img src="{{ site.baseurl }}/assets/images/qwiereless-logo.svg" alt="MyOroscope Logo" class="navbar-logo" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07XL" aria-controls="navbarsExample07XL" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -70,7 +70,7 @@
                     </ul>
                 </li>-->
             </ul>
-            <a href="http://my.italiacandele.com/" class="btn btn-custom-primary btn-lg px-4 fw-bold">
+            <a href="http://my.MyOroscope.com/" class="btn btn-custom-primary btn-lg px-4 fw-bold">
               <i class="fa-solid fa-fingerprint"></i> Accedi
             </a>
 

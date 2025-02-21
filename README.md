@@ -22,8 +22,8 @@ bundle exec jekyll serve
 - ✅ SEO strutturare la seo del sito, attenzione ai meta tags e alle immagini di anteprima '_incudes/seo.html'
 - ✅ Completare la clonazione dei contenuti del sito
 - 🔜 Editing di menu e footer per rispecchiare l'originale --> quasi fatto
-- 🔜 analizzare e creare lo script di deploy [https://kiwi.italiacandele.com/antonio/jekyll-ItaliaCandele/wiki/script-di-deploy](wiki)
-- 🔜 Ideare uno script per effettuare il minify del sito di produzione [https://kiwi.italiacandele.com/antonio/jekyll-ItaliaCandele/wiki/script-di-deploy](wiki)
+- 🔜 analizzare e creare lo script di deploy [https://kiwi.MyOroscope.com/antonio/jekyll-MyOroscope/wiki/script-di-deploy](wiki)
+- 🔜 Ideare uno script per effettuare il minify del sito di produzione [https://kiwi.MyOroscope.com/antonio/jekyll-MyOroscope/wiki/script-di-deploy](wiki)
 
 ### 1. Verifica se sei nella directory corretta
 Assicurati di essere nella directory del progetto dove intendi configurare il repository Git. Usa il comando:
@@ -42,7 +42,7 @@ Questo creerà una directory `.git` nel tuo progetto, rendendolo un repository G
 ### 3. Aggiungi il remote
 Dopo aver inizializzato il repository, aggiungi il remote:
 ```bash
-git remote add origin https://kiwi.italiacandele.com/antonio/jekyll-ItaliaCandele.git
+git remote add origin https://kiwi.MyOroscope.com/antonio/jekyll-MyOroscope.git
 ```
 
 ### 4. Conferma l'operazione
@@ -52,8 +52,8 @@ git remote -v
 ```
 Dovresti vedere qualcosa come:
 ```
-origin  https://kiwi.italiacandele.com/antonio/jekyll-ItaliaCandele.git (fetch)
-origin  https://kiwi.italiacandele.com/antonio/jekyll-ItaliaCandele.git (push)
+origin  https://kiwi.MyOroscope.com/antonio/jekyll-MyOroscope.git (fetch)
+origin  https://kiwi.MyOroscope.com/antonio/jekyll-MyOroscope.git (push)
 ```
 
 ### 5. Aggiungi file e fai il primo commit (se necessario)
