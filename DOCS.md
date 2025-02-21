@@ -160,3 +160,66 @@ def send_horoscope(email):
 🔹 Se l'abbonamento viene rinnovato, verrà automaticamente mandato un nuovo oroscopo.  
 
 📌 **Vuoi aggiungere un'area riservata per gli utenti dove scaricare gli oroscopi?** 🚀
+
+
+
+
+Snipcart raccoglie già i dati di base dell'utente in fase di checkout, come:  
+✔ Nome  
+✔ Email  
+✔ Indirizzo di fatturazione  
+✔ Metodo di pagamento  
+
+Tuttavia, per il tuo servizio hai bisogno di **nome, data di nascita e luogo di nascita**.  
+Puoi raccogliere questi dati personalizzando il checkout di Snipcart con **custom fields**.
+
+---
+
+### **Aggiungere Campi Personalizzati nel Checkout di Snipcart**
+Snipcart permette di aggiungere campi extra ai prodotti usando `data-item-customX-name`.
+
+Modifichiamo i pulsanti di abbonamento per raccogliere i dati necessari:
+
+```html
+<button class="btn btn-success mt-3 snipcart-add-item"
+    data-item-id="oroscopo-settimanale"
+    data-item-name="Abbonamento Oroscopo Settimanale"
+    data-item-price="4.99"
+    data-item-recurring="true"
+    data-item-recurring-interval="1 week"
+    data-item-url="/prodotti/oroscopo-settimanale"
+    data-item-custom1-name="Data di Nascita"
+    data-item-custom1-type="date"
+    data-item-custom1-required="true"
+    data-item-custom2-name="Luogo di Nascita"
+    data-item-custom2-type="text"
+    data-item-custom2-required="true">
+    Abbonati Ora
+</button>
+```
+
+Lo stesso va aggiunto al pulsante per l'abbonamento mensile.
+
+---
+
+### **Come Recuperare Questi Dati?**
+Quando un utente completa l'acquisto, Snipcart ti invia un webhook con tutti i dati, inclusi quelli personalizzati.  
+Nel tuo endpoint FastAPI, puoi recuperare i valori così:
+
+```python
+@app.post("/webhook/subscription")
+async def handle_subscription_webhook(request: Request):
+    payload = await request.json()
+    subscription_data = payload.get("content", {})
+
+    customer_email = subscription_data.get("user", {}).get("email")
+    birth_date = subscription_data.get("customFields", {}).get("Data di Nascita", "N/A")
+    birth_place = subscription_data.get("customFields", {}).get("Luogo di Nascita", "N/A")
+
+    print(f"Nuovo abbonamento: {customer_email}, Nato il: {birth_date}, a: {birth_place}")
+```
+
+---
+
+Ora Snipcart raccoglierà e invierà questi dati al tuo backend! 🚀  
+📌 Ti serve aiuto per testare i webhook o integrarli nel tuo sistema?
