@@ -1,0 +1,60 @@
+---
+layout: default
+title: "Prodotti"
+permalink: "/prodotti/"
+---
+
+<div class="container mt-5">
+  <h1 class="fw-bold">Tutti i Prodotti</h1>
+
+  <!-- Filtro per categoria -->
+  <div class="mb-4">
+    <label for="category-filter" class="form-label">Filtra per Categoria</label>
+    <select id="category-filter" class="form-select">
+      <option value="all">Tutti</option>
+      {% assign all_categories = site.products | map: 'categories' | flatten | uniq %}
+      {% for category in all_categories %}
+      <option value="{{ category }}">{{ category }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="row">
+    {% for product in site.products %}
+    <div class="col-md-4" data-categories="{{ product.categories | join: ',' }}">
+      <div class="card mb-4 shadow-sm">
+        <img src="{{ product.image }}" class="card-img-top" alt="{{ product.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.title }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="text-muted">{{ product.price }} €</p>
+
+          <!-- Link per visualizzare il prodotto -->
+          <a href="{{ product.url | absolute_url }}" class="btn btn-primary">Visualizza Prodotto</a>
+
+          <!-- Badge Disponibilità -->
+          <span class="badge {% if product.availability == false %}bg-danger{% else %}bg-success{% endif %}">
+            {% if product.availability == false %}Non disponibile{% else %}Disponibile{% endif %}
+          </span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  // Filtro delle categorie
+  document.getElementById("category-filter").addEventListener("change", function() {
+    var selectedCategory = this.value;
+    var products = document.querySelectorAll(".col-md-4");
+    products.forEach(function(product) {
+      var productCategories = product.getAttribute("data-categories").split(',');
+      if (selectedCategory === "all" || productCategories.includes(selectedCategory)) {
+        product.style.display = "block";
+      } else {
+        product.style.display = "none";
+      }
+    });
+  });
+</script>

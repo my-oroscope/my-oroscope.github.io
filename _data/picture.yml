@@ -1,0 +1,217 @@
+media_queries:
+  wide_desktop: 'min-width: 1801px'
+  desktop: 'max-width: 1800px'
+  wide_tablet: 'max-width: 1200px'
+  tablet: 'max-width: 900px'
+  mobile: 'max-width: 600px'
+  sm: 'min-width: 640px'
+  md: 'min-width: 768px'
+  lg: 'min-width: 1024px'
+  xl: 'min-width: 1280px'
+  2xl: 'min-width: 1536px'
+presets:
+  default:
+    markup: picture
+    link_source: false
+    dimension_attributes: true
+    formats: [original]
+    format_quality:
+      jpg: 75
+      png: 65
+      webp: 55
+    widths: [200, 400, 800, 1600]
+    media_widths:
+      mobile: [200, 400, 600]
+      tablet: [400, 600, 800]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 1600px
+    fallback_width: 1600
+    fallback_format: original
+    attributes:
+      parent: 'data-downloadable="true"'
+      picture: 'data-volume="11"'
+      img: 'class="lazy" loading="lazy"'
+  bloocks:
+    markup: picture
+    link_source: false
+    dimension_attributes: true # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [200, 400, 800, 1600] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [200, 400, 600]
+      tablet: [400, 600, 800]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 1600px
+    fallback_width: 1600
+    fallback_format: original
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  swiper:
+    markup: picture
+    link_source: false
+    dimension_attributes: false # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [450, 600] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [450]
+      tablet: [450]
+      desktop: [600]
+      wide_desktop: [600]
+      wide_tablet: [600]      
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 600px
+    fallback_width: 600
+    fallback_format: original
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  thumbswiper:
+    markup: picture
+    link_source: false
+    dimension_attributes: false # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [100, 150] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [150]
+      tablet: [150]
+      desktop: [100]
+      wide_desktop: [100]
+      wide_tablet: [100]      
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 100px
+    fallback_width: 100
+    fallback_format: original
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  fullimg:
+    markup: picture
+    link_source: false
+    dimension_attributes: true # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [200, 400, 800, 1600, 1900] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [200, 400, 600]
+      tablet: [400, 600, 800]
+    sizes:
+      mobile: calc(100vw - 16px)
+      tablet: 80vw
+    size: 1600px
+    fallback_width: 1600
+    fallback_format: original
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  product-list:
+    markup: auto
+    link_source: false
+    dimension_attributes: true # Page reflow begone!
+    formats: [jpg, original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [350] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [350]
+      tablet: [350]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 350px
+    fallback_width: 350
+    fallback_format: original
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  nolazy:
+    markup: auto
+    link_source: false
+    dimension_attributes: true # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [200, 400, 800, 1600] # Must be an array.
+    media_widths: # Because a cell phone doesn't want 1600 pixels.
+      mobile: [200, 400, 600]
+      tablet: [400, 600, 800]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 800px
+    fallback_width: 800
+    fallback_format: original
+  small:
+    markup: auto
+    link_source: false
+    dimension_attributes: true # Page reflow begone!
+    formats: [original] # Must be an array, and order matters.
+    format_quality:
+      jpg: 100
+      png: 100
+      webp: 100
+    widths: [200, 400]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 100px
+    attributes:
+      img: 'class="lazy" loading="lazy"'
+  icon:
+    base_width: 20
+    pixel_ratios: [1, 1.5, 2]
+    fallback_width: 20
+    attributes:
+      img: 'class="icon"'
+  lazy:
+    markup: auto
+    dimension_attributes: true
+    formats: [webp, original]
+    format_quality:
+      jpg: 75
+      png: 65
+      webp: 55
+    widths: [200, 400, 800, 1600]
+    media_widths:
+      mobile: [200, 400, 600]
+      tablet: [400, 600, 800]
+    sizes:
+      mobile: 100vw
+      tablet: 80vw
+    size: 800px
+    fallback_width: 800
+    fallback_format: original
+    attributes:
+      parent: 'data-downloadable="true"'
+      picture: 'class="awesome" data-volume="11"'
+      img: 'class="some-other-class" loading="lazy"'
+      a: 'class="image-link"'
+  direct:
+    markup: direct_url
+    fallback_format: webp
+    fallback_width: 600
+  srcset:
+    markup: naked_srcset
+    formats: [webp]
