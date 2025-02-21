@@ -1,225 +1,212 @@
-Snipcart supporta la vendita di abbonamenti utilizzando prodotti ricorrenti. Puoi configurare un prodotto in abbonamento direttamente nel tuo frontend Jekyll specificando i parametri richiesti da Snipcart, come il ciclo di fatturazione (settimanale/mensile).
+Per integrare il tuo frontend Jekyll con Paddle e gestire prodotti in abbonamento, dovrai seguire alcuni passaggi:
 
-### Passaggi per gestire gli abbonamenti con Snipcart:
+### 1. **Integrazione di Paddle con il Frontend Jekyll**
+   - **API Paddle**: Paddle offre un'API per integrare il sistema di pagamento nel tuo sito. Per prima cosa, dovrai configurare un account Paddle e ottenere una chiave API.
+   - **Product Setup**: Creerai un prodotto su Paddle per ogni tipo di abbonamento (settimanale o mensile). Puoi utilizzare la dashboard di Paddle per farlo.
+   - **Checkout Widget**: Usando il codice di Paddle, puoi integrare un widget di checkout nel tuo sito Jekyll. Questo widget consentirà agli utenti di acquistare l'abbonamento direttamente dal tuo sito.
 
-1. **Configurare il prodotto come abbonamento**  
-   Nel tuo codice Jekyll, definisci il pulsante di acquisto includendo i parametri di abbonamento di Snipcart:
+### 2. **Gestione degli Abbonamenti**
+   - **Webhooks di Paddle**: Paddle fornisce i webhooks per monitorare lo stato degli abbonamenti. Puoi usare i webhooks per aggiornare lo stato degli utenti nel tuo database quando un pagamento viene effettuato, un abbonamento è stato rinnovato, o un pagamento non è riuscito.
+   - **Autenticazione Utenti**: Dopo che un utente ha completato il pagamento, puoi utilizzare le informazioni ottenute tramite il webhook per creare un account utente o aggiornarne uno esistente nel tuo sistema di gestione utenti.
+
+### 3. **Generazione dell'Oroscopo**
+   - **FastAPI Script**: Il tuo script in FastAPI riceverà le informazioni necessarie (nome, data di nascita, luogo di nascita) e calcolerà l'oroscopo. Puoi esporre l'API di FastAPI in modo che il tuo sito possa invocarla ogni volta che l'utente è autenticato e ha un abbonamento attivo.
+   - **Connessione tra FastAPI e il Frontend**: Quando un utente è loggato e ha un abbonamento attivo, il tuo frontend può invocare l'API di FastAPI per recuperare l'oroscopo personalizzato in base ai dati di nascita dell'utente.
+
+### 4. **Comunicazione tra Paddle e FastAPI**
+   - Puoi creare una logica che, in base agli aggiornamenti dei pagamenti di Paddle, invii un invito tramite email o notifichi l'utente via API quando è il momento di ricevere l'oroscopo.
+
+Questi passaggi ti permetteranno di gestire in modo completo il flusso di abbonamento e di consegna dell'oroscopo. Se hai bisogno di dettagli tecnici su uno di questi passaggi o su come configurare i webhooks di Paddle, fammi sapere!
+
+Ecco i dettagli di ogni passaggio per integrare Paddle con il tuo frontend Jekyll e gestire gli abbonamenti per l'oroscopo.
+
+### 1. **Integrazione di Paddle con il Frontend Jekyll**
+
+#### a. **Registrazione e configurazione di un account Paddle**
+   - **Crea un account Paddle**: Vai su [Paddle.com](https://paddle.com/) e registrati. Dopo aver creato il tuo account, avrai accesso alla tua dashboard Paddle.
+   - **Ottenere le chiavi API**: Nella dashboard Paddle, vai su "Developer Tools" e trova la tua chiave API per autenticare le chiamate al sistema di Paddle. Questa chiave ti permette di interagire programmaticamente con il sistema di Paddle.
+
+#### b. **Creazione dei prodotti su Paddle**
+   - Vai nella dashboard di Paddle e crea un nuovo prodotto (abbonamento). Puoi configurare due prodotti, uno per l'abbonamento settimanale e uno per quello mensile. Durante la creazione, Paddle ti chiederà di configurare il prezzo, la frequenza (settimanale/mensile) e le informazioni fiscali.
+   - **Opzioni di Abbonamento**:
+     - **Nome prodotto**: Per esempio, "Oroscopo Settimanale" e "Oroscopo Mensile".
+     - **Prezzo**: Imposta il prezzo desiderato per ogni prodotto.
+     - **Frequenza di pagamento**: Imposta la durata dell'abbonamento (settimanale o mensile).
+   - Salva i dettagli del prodotto. Questi prodotti genereranno un "product_id" che sarà utile per la gestione tramite API.
+
+#### c. **Integrazione del checkout di Paddle**
+   - **Paddle Checkout**: Paddle offre un modulo di checkout che puoi incorporare nel tuo sito web. Puoi farlo con il codice che Paddle ti fornirà. Ecco un esempio di come integrarlo in una pagina del tuo sito:
+   
    ```html
-   <button class="snipcart-add-item"
-       data-item-id="oroscopo-mensile"
-       data-item-name="Abbonamento Oroscopo Mensile"
-       data-item-price="9.99"
-       data-item-recurring-interval="1 month"
-       data-item-recurring="true"
-       data-item-url="/prodotti/oroscopo-mensile">
-       Abbonati
-   </button>
+   <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
+   <button id="checkout-button">Acquista Abbonamento Settimanale</button>
+   <script>
+     Paddle.Setup({ vendor: YOUR_VENDOR_ID }); // Inserisci il tuo vendor ID
+     
+     document.getElementById("checkout-button").onclick = function() {
+       Paddle.Checkout.open({
+         product: YOUR_PRODUCT_ID, // Inserisci il product ID del prodotto settimanale
+         email: 'user_email@domain.com', // Email dell'utente (opzionale, puoi raccoglierla dal tuo form)
+         successCallback: function(data) {
+           // Codice per gestire il successo, ad esempio inviare una conferma via email
+           console.log("Successo:", data);
+         },
+         closeCallback: function() {
+           // Codice per gestire la chiusura del checkout
+           console.log("Chiusura checkout");
+         }
+       });
+     };
+   </script>
    ```
-   Per un abbonamento settimanale, cambia `data-item-recurring-interval="1 week"`.
 
-2. **Gestire la generazione dell'oroscopo con FastAPI**  
-   Dopo l'acquisto, Snipcart ti permette di ricevere webhook sugli eventi di pagamento. Puoi usare il webhook `subscription.created` per attivare la generazione automatica dell'oroscopo per il cliente.
+   Questo script farà apparire un pulsante "Acquista" sulla tua pagina. Quando l'utente clicca, si aprirà il modulo di checkout di Paddle.
 
-3. **Webhook per automatizzare la consegna**  
-   Configura un webhook in Snipcart che notifichi il tuo backend FastAPI quando un nuovo pagamento di abbonamento è andato a buon fine. Nel backend, puoi inviare l'oroscopo via email o renderlo disponibile in un'area riservata.
+### 2. **Gestione degli Abbonamenti con Webhooks**
 
-4. **Autenticazione degli utenti**  
-   Snipcart gestisce automaticamente gli utenti iscritti. Puoi usare la funzione di autenticazione Snipcart per permettere agli abbonati di accedere alla loro area personale e consultare gli oroscopi.
-
-Vuoi aiuto su una parte specifica, come la configurazione dei webhook o l'integrazione con FastAPI?
-
-
-
-Perfetto! Divideremo il lavoro in due parti:  
-
-1. **Configurazione dei webhook su Snipcart**  
-2. **Gestione delle richieste webhook con FastAPI per inviare l'oroscopo agli utenti**
-
----
-
-### **1. Configurazione dei Webhook su Snipcart**
-Snipcart offre webhook che notificano il tuo backend sugli eventi importanti, come la creazione di un abbonamento o il pagamento di una rata.
-
-#### **Passaggi:**
-1. Vai su **Snipcart Dashboard** → **Developer** → **Webhooks**.
-2. Clicca su **Add new webhook**.
-3. Inserisci l'URL del tuo backend FastAPI che riceverà la richiesta, ad esempio:  
+#### a. **Impostazione dei Webhooks di Paddle**
+   - **Cos'è un Webhook**: I webhooks ti permettono di ricevere notifiche in tempo reale quando un evento accade nel sistema di Paddle, come l'acquisto di un abbonamento, il rinnovo, o una cancellazione.
+   - **Configurazione Webhook**:
+     1. Vai alla sezione "Webhooks" nella dashboard di Paddle.
+     2. Inserisci l'URL del tuo server dove Paddle invierà le notifiche (questo potrebbe essere un endpoint della tua API che riceve le notifiche).
+   
+   Esempio di payload che Paddle invia quando un pagamento viene effettuato:
+   ```json
+   {
+     "alert_name": "subscription_created",
+     "subscription_id": "123456",
+     "customer_email": "user@domain.com",
+     "product_id": "YOUR_PRODUCT_ID",
+     "status": "active"
+   }
    ```
-   https://mio-backend.com/webhook/subscription
+
+#### b. **Gestione dei Webhooks**
+   - Ricevuti i dati via webhook, puoi scrivere una logica nel tuo backend per aggiornare lo stato dell'utente:
+     - **Creare un nuovo account utente** (se non esiste).
+     - **Aggiornare il profilo dell'utente** con l'informazione sull'abbonamento.
+     - **Attivare l'accesso** all'oroscopo una volta che il pagamento è completato.
+   - Puoi anche impostare webhook per aggiornamenti periodici e per quando l'abbonamento viene rinnovato.
+
+### 3. **Generazione dell'Oroscopo**
+
+#### a. **Script in FastAPI**
+   - Il tuo script FastAPI dovrà essere esposto tramite un endpoint pubblico che possa ricevere le informazioni necessarie (nome, data di nascita, luogo di nascita) e restituire l'oroscopo.
+   - Esempio di un endpoint FastAPI:
+   
+   ```python
+   from fastapi import FastAPI
+   from pydantic import BaseModel
+   
+   app = FastAPI()
+   
+   class UserData(BaseModel):
+       name: str
+       birthdate: str
+       birthplace: str
+   
+   @app.post("/generate-horoscope")
+   async def generate_horoscope(user_data: UserData):
+       # Codice per calcolare l'oroscopo
+       horoscope = generate_horoscope(user_data)
+       return {"horoscope": horoscope}
    ```
-4. Seleziona gli eventi da monitorare, in particolare:
-   - `subscription.created` → Quando un utente acquista un abbonamento.
-   - `subscription.renewed` → Quando un pagamento ricorrente viene completato con successo.
-   - `subscription.cancelled` → Se l'utente annulla l'abbonamento.
 
-5. Salva il webhook. Ora Snipcart invierà notifiche al tuo FastAPI ogni volta che si verifica uno di questi eventi.
+   **Note**:
+   - L'API riceve i dati dell'utente (nome, data di nascita e luogo di nascita) e restituisce l'oroscopo.
+   - Puoi implementare la logica di calcolo dell'oroscopo in base ai dettagli forniti dall'utente.
 
----
+#### b. **Connessione tra Frontend e FastAPI**
+   - Una volta che l'utente ha un abbonamento attivo, puoi chiamare l'API FastAPI dal tuo frontend per ottenere l'oroscopo.
+   - Esempio di richiesta via JavaScript:
+   
+   ```javascript
+   async function getHoroscope() {
+     const response = await fetch("https://tuo-api.com/generate-horoscope", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify({
+         name: "Mario Rossi",
+         birthdate: "1990-04-15",
+         birthplace: "Roma"
+       })
+     });
+     const data = await response.json();
+     console.log(data.horoscope);
+   }
+   ```
 
-### **2. Gestione dei Webhook in FastAPI**
-Dobbiamo ora creare un endpoint in FastAPI per ricevere i webhook e inviare l'oroscopo all'utente.
+### 4. **Comunicazione tra Paddle e FastAPI**
 
-#### **Installiamo le dipendenze necessarie**
-Se non lo hai già fatto, assicurati di avere `FastAPI` e `uvicorn` installati:
-```bash
-pip install fastapi uvicorn requests
-```
+#### a. **Gestione dell'accesso dell'utente**
+   - Una volta che l'abbonamento è attivo (dopo il pagamento), utilizza il webhook di Paddle per attivare l'accesso dell'utente e inviare loro una conferma via email con il link per accedere all'oroscopo.
+   - Puoi inviare una richiesta alla tua API FastAPI per ottenere l'oroscopo dell'utente e inviarlo via email.
 
-#### **Creiamo il file `webhooks.py`**
-```python
-from fastapi import FastAPI, Request, HTTPException
-import json
+#### b. **Integrazione del pagamento con il sistema di autenticazione**
+   - Puoi aggiungere un sistema di login per l'utente sul tuo sito in modo che solo gli utenti abbonati possano accedere all'oroscopo. Dopo che il pagamento è stato completato, l'utente può autenticarsi e consultare il proprio oroscopo.
 
-app = FastAPI()
-
-@app.post("/webhook/subscription")
-async def handle_subscription_webhook(request: Request):
-    payload = await request.json()
-    
-    event_type = payload.get("eventName")
-    subscription_data = payload.get("content", {})
-
-    if not subscription_data:
-        raise HTTPException(status_code=400, detail="Invalid webhook payload")
-
-    customer_email = subscription_data.get("user", {}).get("email")
-    subscription_id = subscription_data.get("id")
-
-    if event_type == "subscription.created":
-        message = f"Nuovo abbonamento creato! Invio l'oroscopo a {customer_email}"
-        send_horoscope(customer_email)
-
-    elif event_type == "subscription.renewed":
-        message = f"Pagamento ricorrente confermato per {customer_email}. Invio nuovo oroscopo."
-        send_horoscope(customer_email)
-
-    elif event_type == "subscription.cancelled":
-        message = f"Abbonamento annullato per {customer_email}. Niente più oroscopi."
-
-    else:
-        message = f"Evento non gestito: {event_type}"
-
-    print(message)
-    return {"message": message}
-
-def send_horoscope(email):
-    """
-    Funzione per inviare l'oroscopo all'utente via email.
-    Qui puoi integrare un servizio come SendGrid, Mailgun o SMTP.
-    """
-    print(f"Invio oroscopo a {email}")  
-    # Qui va l'integrazione con il sistema di invio email.
-```
-
----
-
-### **3. Configurare FastAPI per ricevere Webhook**
-Ora avvia FastAPI:
-```bash
-uvicorn webhooks:app --host 0.0.0.0 --port 8000
-```
-Se usi un server pubblico, assicurati che il dominio sia accessibile da Snipcart.
-
----
-
-### **4. Integrazione con il Sistema di Invio Email**
-Nel metodo `send_horoscope(email)`, devi implementare un sistema per inviare l'oroscopo via email.  
-Puoi usare un servizio come **SendGrid**, **Mailgun** o SMTP.
-
-Ad esempio, con **SendGrid**:
-```bash
-pip install sendgrid
-```
-E nel codice:
-```python
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
-SENDGRID_API_KEY = "TUA_CHIAVE_API"
-
-def send_horoscope(email):
-    message = Mail(
-        from_email="tuo@email.com",
-        to_emails=email,
-        subject="Il tuo oroscopo",
-        html_content="<p>Ecco il tuo oroscopo del mese!</p>")  
-
-    try:
-        sg = SendGridAPIClient(SENDGRID_API_KEY)
-        response = sg.send(message)
-        print(f"Email inviata a {email}: {response.status_code}")
-    except Exception as e:
-        print(f"Errore nell'invio dell'email: {e}")
-```
-
----
-
-### **Conclusione**
-🔹 Snipcart invierà un webhook a FastAPI quando un cliente si abbona.  
-🔹 FastAPI riceverà la notifica e invierà l'oroscopo via email.  
-🔹 Se l'abbonamento viene rinnovato, verrà automaticamente mandato un nuovo oroscopo.  
-
-📌 **Vuoi aggiungere un'area riservata per gli utenti dove scaricare gli oroscopi?** 🚀
+Questi passaggi ti guideranno nel processo di configurazione completa dell'integrazione con Paddle, gestione degli abbonamenti e calcolo dell'oroscopo tramite FastAPI. Se hai bisogno di ulteriori dettagli su uno dei passaggi, fammi sapere!
 
 
 
+Hai ragione, per erogare l'oroscopo hai bisogno dei dati specifici dell'utente (nome, data di nascita, luogo di nascita), ma questi dati non sono tipicamente inclusi nel webhook di Paddle, che si concentra principalmente sugli eventi di pagamento. Pertanto, dovrai implementare una strategia per raccogliere questi dati in modo sicuro dopo che l'utente ha completato l'abbonamento. Ecco una possibile soluzione per risolvere questo problema:
 
-Snipcart raccoglie già i dati di base dell'utente in fase di checkout, come:  
-✔ Nome  
-✔ Email  
-✔ Indirizzo di fatturazione  
-✔ Metodo di pagamento  
+### Strategia di Gestione dei Dati Utente per l'Oroscopo
 
-Tuttavia, per il tuo servizio hai bisogno di **nome, data di nascita e luogo di nascita**.  
-Puoi raccogliere questi dati personalizzando il checkout di Snipcart con **custom fields**.
+#### 1. **Acquisizione dei Dati dell'Utente (Nome, Data di Nascita, Luogo di Nascita)**
 
----
+Una volta che l'utente ha completato il pagamento, ci sono diversi modi per raccogliere i dati necessari per l'oroscopo:
 
-### **Aggiungere Campi Personalizzati nel Checkout di Snipcart**
-Snipcart permette di aggiungere campi extra ai prodotti usando `data-item-customX-name`.
+- **Modulo di registrazione post-pagamento**: Dopo che il pagamento è stato completato, puoi inviare l'utente a una pagina di registrazione dove inserisce i suoi dati (nome, data di nascita, luogo di nascita). Questa pagina può essere una parte del tuo sito Jekyll.
+  
+  - Puoi mostrare una pagina con un modulo dove l'utente inserisce queste informazioni.
+  - Dopo che l'utente invia il modulo, puoi memorizzare questi dati nel tuo database associato al loro account.
 
-Modifichiamo i pulsanti di abbonamento per raccogliere i dati necessari:
+#### 2. **Memorizzazione dei Dati dell'Utente**
 
-```html
-<button class="btn btn-success mt-3 snipcart-add-item"
-    data-item-id="oroscopo-settimanale"
-    data-item-name="Abbonamento Oroscopo Settimanale"
-    data-item-price="4.99"
-    data-item-recurring="true"
-    data-item-recurring-interval="1 week"
-    data-item-url="/prodotti/oroscopo-settimanale"
-    data-item-custom1-name="Data di Nascita"
-    data-item-custom1-type="date"
-    data-item-custom1-required="true"
-    data-item-custom2-name="Luogo di Nascita"
-    data-item-custom2-type="text"
-    data-item-custom2-required="true">
-    Abbonati Ora
-</button>
-```
+- **Database**: Quando l'utente invia i dati tramite il modulo, devi memorizzarli nel tuo sistema. Puoi utilizzare un database (ad esempio, SQLite, MySQL, PostgreSQL) per salvare i dati dell'utente e associarli al suo account o ID cliente.
+- **Link tra i dati di Paddle e i dati dell'utente**: Ogni volta che un utente effettua un pagamento tramite Paddle, puoi ottenere un ID utente (dal webhook o da un altro sistema) e associare l'ID utente ai dati appena raccolti. Questo ti consente di sapere quali dati di oroscopo generare per quale utente.
 
-Lo stesso va aggiunto al pulsante per l'abbonamento mensile.
+#### 3. **Utilizzo del Webhook di Paddle**
 
----
+- Dopo che l'utente ha completato il pagamento, Paddle invia il webhook al tuo server. Puoi quindi utilizzare l'ID dell'utente per associare il pagamento con un utente nel tuo database.
+- Dopo aver ricevuto il webhook, se l'utente non ha ancora fornito i dati richiesti (nome, data di nascita, luogo di nascita), puoi inviarlo a una pagina di completamento dei dati, dove l'utente inserisce queste informazioni.
+  
+  Ad esempio:
+  - Se il pagamento va a buon fine, invia l'utente a una pagina dove completa i dati mancanti.
+  - Una volta che l'utente ha fornito i dati, memorizzi questi dettagli nel tuo sistema.
 
-### **Come Recuperare Questi Dati?**
-Quando un utente completa l'acquisto, Snipcart ti invia un webhook con tutti i dati, inclusi quelli personalizzati.  
-Nel tuo endpoint FastAPI, puoi recuperare i valori così:
+#### 4. **Generazione dell'Oroscopo**
 
-```python
-@app.post("/webhook/subscription")
-async def handle_subscription_webhook(request: Request):
-    payload = await request.json()
-    subscription_data = payload.get("content", {})
+Quando un utente è loggato e ha completato il pagamento, puoi inviare una richiesta alla tua API FastAPI con i dati necessari (nome, data di nascita, luogo di nascita) per generare l'oroscopo.
 
-    customer_email = subscription_data.get("user", {}).get("email")
-    birth_date = subscription_data.get("customFields", {}).get("Data di Nascita", "N/A")
-    birth_place = subscription_data.get("customFields", {}).get("Luogo di Nascita", "N/A")
+- **Esempio di Flusso Completo**:
+  1. L'utente effettua un pagamento tramite Paddle.
+  2. Ricevi il webhook di Paddle e controlli se i dati utente sono completi (nome, data di nascita, luogo di nascita).
+  3. Se mancano dati, invii l'utente a una pagina per completarli.
+  4. Dopo che l'utente ha fornito i dati, li memorizzi nel tuo sistema.
+  5. Quando l'utente accede all'oroscopo, invii una richiesta alla tua API FastAPI con questi dati per generare l'oroscopo personalizzato.
 
-    print(f"Nuovo abbonamento: {customer_email}, Nato il: {birth_date}, a: {birth_place}")
-```
+#### 5. **Autenticazione Utente e Gestione Accesso**
 
----
+Per tenere traccia degli utenti e assicurarne l'accesso sicuro all'oroscopo, puoi implementare una logica di login nel tuo sito:
 
-Ora Snipcart raccoglierà e invierà questi dati al tuo backend! 🚀  
-📌 Ti serve aiuto per testare i webhook o integrarli nel tuo sistema?
+- Dopo il pagamento, puoi registrare l'utente e inviargli un link per il login.
+- Una volta loggato, l'utente può essere indirizzato alla sezione dell'oroscopo, dove verranno utilizzati i suoi dati memorizzati per calcolare l'oroscopo.
+
+### Esempio di Flusso Dettagliato
+
+1. **Pagamento completato** tramite Paddle (ricevi il webhook).
+2. **Controllo database**: Verifica se i dati (nome, data di nascita, luogo di nascita) sono già presenti nel database.
+   - Se **mancano i dati**, invia l'utente a una pagina di registrazione.
+3. **Raccolta dati**: L'utente completa il modulo con nome, data di nascita e luogo di nascita.
+4. **Memorizzazione dati** nel database e associamento con l'ID dell'utente.
+5. **Generazione oroscopo**: Quando l'utente accede, i dati vengono inviati a FastAPI per generare l'oroscopo.
+
+### Conclusioni
+
+Questa soluzione ti permette di gestire i dati necessari per l'oroscopo anche senza avere tutte le informazioni nel webhook di Paddle. Il punto cruciale è raccogliere questi dati in modo sicuro prima di erogare l'oroscopo, assicurandoti che l'utente abbia completato correttamente il pagamento prima di procedere con l'accesso all'oroscopo.
+
+Se hai bisogno di ulteriori dettagli su uno specifico passaggio (come l'implementazione di una pagina di raccolta dati o la gestione dell'autenticazione), fammi sapere!
