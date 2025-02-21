@@ -30,7 +30,6 @@
 body, h1, h2, h3, p {
   font-family: var(--font-family-poppins);
   color: var(--bs-text);
-  background-color: var(--bs-secondary);
 }
 
 /* Navbar */
