@@ -1,4 +1,4 @@
-
+https://chatgpt.com/share/67bb2182-c520-8011-b289-73c27763ce92
 Certamente! Ecco una **guida completa e dettagliata** per configurare la tua applicazione FastAPI con MySQL su una VM Oracle Cloud Free Tier (1 core ARM, 1 GB di RAM, 20 GB di disco), ottimizzata per gestire 1000 utenti con accessi sporadici.
 
 ---

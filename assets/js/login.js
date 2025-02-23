@@ -32,8 +32,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           localStorage.setItem("token", data.access_token);
-          successMessageContainer.textContent = `Logged in with token: ${data.access_token}`;
+          successMessageContainer.textContent = `Logged in successfully.`;
           errorMessageContainer.textContent = "";
+  
+          // Una volta effettuato il login, chiama il recupero dei dati sicuri
+          // Qui richiamiamo la funzione dal file securedata.js senza modificarla
+          fetchSecureData(); // Chiamata alla funzione definita in securedata.js
         })
         .catch((error) => {
           errorMessageContainer.textContent = error.message || "Something went wrong";
