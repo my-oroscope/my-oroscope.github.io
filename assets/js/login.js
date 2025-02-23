@@ -23,19 +23,20 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         body: body,
       })
-        .then((response) => response.json())
-        .then((data) => {
+        .then((response) => {
           if (response.ok) {
-            localStorage.setItem("token", data.access_token);
-            successMessageContainer.textContent = `Logged in with token: ${data.access_token}`;
-            errorMessageContainer.textContent = "";
+            return response.json();  // Solo se la risposta è ok, trasformiamo in JSON
           } else {
-            errorMessageContainer.textContent = data.detail;
-            successMessageContainer.textContent = "";
+            throw new Error('Login failed');
           }
         })
-        .catch(() => {
-          errorMessageContainer.textContent = "Something went wrong";
+        .then((data) => {
+          localStorage.setItem("token", data.access_token);
+          successMessageContainer.textContent = `Logged in with token: ${data.access_token}`;
+          errorMessageContainer.textContent = "";
+        })
+        .catch((error) => {
+          errorMessageContainer.textContent = error.message || "Something went wrong";
           successMessageContainer.textContent = "";
         });
     });
