@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         password: passwordInput.value,
       };
   
-      const apiEndpoint = "{{ site.fastapi_endpoint }}/register";
+      const apiEndpoint = window.fastapiEndpoint + "/register";
   
       fetch(apiEndpoint, {
         method: "POST",

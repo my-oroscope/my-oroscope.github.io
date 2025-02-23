@@ -1,4 +1,4 @@
-const API_BASE_URL = "{{ site.fastapi_endpoint }}";  // Usa la variabile di configurazione di Jekyll
+const API_BASE_URL = window.fastapiEndpoint;  // Usa la variabile di configurazione di Jekyll
 
 const ENDPOINTS = {
   login: `${API_BASE_URL}/token`,

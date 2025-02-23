@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const secureDataContainer = document.getElementById("secure-data");
     const errorMessageContainer = document.getElementById("error-message");
   
-    const apiEndpoint = "{{ site.fastapi_endpoint }}/secure-data";
+    const apiEndpoint = window.fastapiEndpoint + "/secure-data";
     const token = localStorage.getItem("token");
   
     if (!token) {

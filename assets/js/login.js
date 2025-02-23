@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const email = emailInput.value;
       const password = passwordInput.value;
   
-      const apiEndpoint = "{{ site.fastapi_endpoint }}/token";
+      const apiEndpoint = window.fastapiEndpoint + "/token";
       const body = new URLSearchParams({
         username: email,
         password: password,
