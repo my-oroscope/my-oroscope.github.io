@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
       generateBtn.disabled = true;
       errorMessageContainer.textContent = '';
 
-      const response = await fetch(`${window.fastapiEndpoint}/genera-oroscopo`, {
+      const response = await fetch(`${window.fastapiEndpoint}/genera_oroscopo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
