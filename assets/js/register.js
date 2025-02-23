@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (response.ok) {  // Devi usare `response` qui, non `data`
+          if (data.message === "User registered successfully") {  // Qui controlliamo la risposta `data`
             successMessageContainer.textContent = "User registered successfully! Please check your email to confirm your account.";
           } else {
             errorMessageContainer.textContent = data.detail || "Error occurred during registration.";
@@ -40,4 +40,5 @@ document.addEventListener("DOMContentLoaded", function () {
           errorMessageContainer.textContent = "An error occurred while trying to register.";
         });
     });
-});
+  });
+  
