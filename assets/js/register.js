@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         password: passwordInput.value,
       };
   
-      const apiEndpoint = window.fastapiEndpoint + "/register";
+      const apiEndpoint = window.fastapiEndpoint + "/register";  // Assicurati che `window.fastapiEndpoint` contenga l'endpoint corretto
   
       fetch(apiEndpoint, {
         method: "POST",
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => response.json())
         .then((data) => {
-          if (response.ok) {
+          if (response.ok) {  // Devi usare `response` qui, non `data`
             successMessageContainer.textContent = "User registered successfully! Please check your email to confirm your account.";
           } else {
             errorMessageContainer.textContent = data.detail || "Error occurred during registration.";
@@ -40,5 +40,4 @@ document.addEventListener("DOMContentLoaded", function () {
           errorMessageContainer.textContent = "An error occurred while trying to register.";
         });
     });
-  });
-  
+});
