@@ -1,0 +1,45 @@
+---
+layout: default
+title: Checkout
+---
+
+<div class="container text-center">
+  <h1>Abbonamenti</h1>
+  <p>Scegli il tuo piano di abbonamento:</p>
+
+  <button id="monthly" class="btn btn-primary">Abbonamento Mensile</button>
+  <button id="yearly" class="btn btn-success">Abbonamento Annuale</button>
+
+  <p id="error-message" class="text-danger mt-3"></p>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const stripe = Stripe("pk_test_51QU51aEb1r0toAUQRzJWvaYMHOaa0G88WxsVV1KoWUnTR5wS9YNnC6XHBxVQTk8uwapmSiM1RDYn8cHwTEjNoVCG00l6UqosbM");
+  const errorMessage = document.getElementById("error-message");
+
+  async function handlePayment(plan) {
+    try {
+      const response = await fetch(`${window.fastapiEndpoint}/create-checkout-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan })
+      });
+
+      const data = await response.json();
+      if (data.sessionId) {
+        await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      } else {
+        errorMessage.textContent = "Errore nella creazione della sessione di pagamento.";
+      }
+    } catch (error) {
+      console.error(error);
+      errorMessage.textContent = "Errore durante il pagamento.";
+    }
+  }
+
+  document.getElementById("monthly").addEventListener("click", () => handlePayment("monthly"));
+  document.getElementById("yearly").addEventListener("click", () => handlePayment("yearly"));
+});
+</script>

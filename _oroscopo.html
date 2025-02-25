@@ -1,0 +1,130 @@
+---
+layout: default
+title: Oroscopo
+---
+
+
+<main>
+  <section class="section section-shaped section-lg">
+    <div class="shape shape-style-1 bg-gradient-default">
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+    </div>
+    <div class="container pt-lg-7">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <h1 class="display-3 text-white">
+            Genera il tuo <span>Oroscopo personalizzato</span>
+          </h1>
+          <p class="lead text-white">
+            Oroscopo personalizzato basato sul tuo nome, segno, ascendente e calcolo della tua carta natale.
+          </p>
+        </div>
+        <div class="col-lg-8">
+          <div class="card shadow mt-5">
+            <div class="card-body">
+              <!-- Form for user inputs -->
+              <form id="oroscopo-form">
+                <!-- Input per il nome -->
+                <div class="form-group">
+                  <label for="nome">Nome</label>
+                  <input type="text" class="form-control" id="nome" name="nome" placeholder="Inserisci il tuo nome" required>
+                </div>
+
+                <!-- Input per la data di nascita -->
+                <div class="form-group">
+                  <label for="data_nascita">Data di nascita</label>
+                  <input type="date" class="form-control" id="data_nascita" name="data_nascita" required>
+                </div>
+
+                <!-- Input per l'ora di nascita -->
+                <div class="form-group">
+                  <label for="ora_nascita">Ora di nascita</label>
+                  <input type="time" class="form-control" id="ora_nascita" name="ora_nascita" required>
+                </div>
+
+                <!-- Input per il luogo di nascita -->
+                <div class="form-group">
+                  <label for="luogo_nascita">Luogo di nascita</label>
+                  <input type="text" class="form-control" id="luogo_nascita" name="luogo_nascita" placeholder="Inserisci il tuo luogo di nascita" required>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-primary btn-block" id="generate-btn">
+                  Genera Oroscopo
+                </button>
+              </form>
+
+              <!-- Error message -->
+              <p id="error-message" class="text-danger mt-3"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container pt-lg pb-300">
+      <div class="row" id="oroscopo-result">
+        <!-- Result of the horoscope will appear here -->
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const oroscopoForm = document.getElementById("oroscopo-form");
+  const errorMessageContainer = document.getElementById("error-message");
+  const resultContainer = document.getElementById("oroscopo-result");
+  const generateBtn = document.getElementById("generate-btn");
+
+  oroscopoForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nome = document.getElementById("nome").value;
+    const data_nascita = document.getElementById("data_nascita").value;
+    const ora_nascita = document.getElementById("ora_nascita").value;
+    const luogo_nascita = document.getElementById("luogo_nascita").value;
+
+    const data = { nome, data_nascita, ora_nascita, luogo_nascita };
+
+    try {
+      // Attiva il bottone e nasconde eventuali messaggi di errore
+      generateBtn.disabled = true;
+      errorMessageContainer.textContent = '';
+
+      const response = await fetch(`${window.fastapiEndpoint}/genera_oroscopo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        // Visualizza il risultato
+        resultContainer.innerHTML = `
+          <h3>Oroscopo:</h3>
+          <p>${result.oroscopo_text}</p>
+          <a href="/pdf/${result.pdf_filename}" target="_blank" class="btn btn-link">Download PDF</a>
+        `;
+      } else {
+        errorMessageContainer.textContent = result.detail || 'Failed to generate horoscope.';
+      }
+    } catch (err) {
+      errorMessageContainer.textContent = 'Something went wrong';
+    } finally {
+      // Rende il bottone di nuovo abilitato
+      generateBtn.disabled = false;
+    }
+  });
+});
+</script>

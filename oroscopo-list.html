@@ -1,0 +1,117 @@
+---
+layout: default
+title: Oroscopo Mensile
+---
+
+
+<main class="profile-page">
+  <section class="section-profile-cover section-shaped my-0">
+    <div class="shape shape-style-1 shape-default alpha-4">
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+    </div>
+    <div class="separator separator-bottom separator-skew">
+      <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" version="1.1" viewBox="0 0 2560 100" x="0" y="0">
+        <polygon class="fill-white" points="2560 0 2560 100 0 100" />
+      </svg>
+    </div>
+    <div class="container pt-lg-7">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+          <h1 class="display-3 text-white">
+            Your Monthly Horoscopes
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="card shadow mt-5">
+        <div class="card-body">
+          <div id="error-message" class="text-danger"></div>
+
+          <div id="horoscopes-container">
+            <!-- Risultati dei dati caricati dinamicamente -->
+            <p>Loading horoscopes...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const horoscopesContainer = document.getElementById("horoscopes-container");
+  const errorMessageContainer = document.getElementById("error-message");
+
+  const fetchHoroscopes = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      errorMessageContainer.textContent = "You need to log in first.";
+      return;
+    }
+
+    try {
+      const response = await fetch(`${window.fastapiEndpoint}/get_monthly_horoscopes/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.horoscopes && data.horoscopes.length > 0) {
+          const rows = data.horoscopes.map(h => `
+            <tr>
+              <td>${h.birthdate}</td>
+              <td>${h.birthplace}</td>
+              <td>${h.sun_sign}</td>
+              <td>${h.ascendant_sign}</td>
+              <td>${h.moon_sign}</td>
+              <td><a href="/pdf/${h.pdf_filename}" target="_blank">Download PDF</a></td>
+            </tr>
+          `).join("");
+
+          horoscopesContainer.innerHTML = `
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date of Birth</th>
+                  <th>Place of Birth</th>
+                  <th>Sun Sign</th>
+                  <th>Ascendant</th>
+                  <th>Moon Sign</th>
+                  <th>Download</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+              </tbody>
+            </table>
+          `;
+        } else {
+          horoscopesContainer.innerHTML = "<p>No horoscopes available.</p>";
+        }
+      } else {
+        errorMessageContainer.textContent = data.detail || "Error fetching horoscopes.";
+      }
+    } catch (err) {
+      errorMessageContainer.textContent = "Something went wrong.";
+    }
+  };
+
+  fetchHoroscopes();
+});
+</script>

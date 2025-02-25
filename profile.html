@@ -1,0 +1,201 @@
+---
+layout: default
+title: Secure Data
+css: /assets/css/custom-style.css
+---
+
+<div class="container mt--7" id="secure-data-container">
+  <div class="row">
+    <div class="col-xl-4 mb-5 mb-xl-0">
+      <div class="card bg-secondary shadow">
+        <div class="card-header bg-white border-0">
+          <div class="row align-items-center">
+            <div class="col-xs-8">
+              <h3 class="mb-0">Change Your Password</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form id="change-password-form">
+            <div class="form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="ni ni-lock-circle-open"></i>
+                  </span>
+                </div>
+                <input id="current-password" class="form-control" type="password" placeholder="Current Password" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="ni ni-lock-circle-open"></i>
+                  </span>
+                </div>
+                <input id="new-password" class="form-control" type="password" placeholder="New Password" required />
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-4">Change Password</button>
+            </div>
+          </form>
+          <p id="error-message" class="error-message"></p>
+          <p id="success-message" class="success-message"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card card-profile shadow">
+        <div class="row justify-content-center">
+          <div class="col-lg-3">
+            <div class="card-profile-image">
+              <a href="#" onclick="event.preventDefault();">
+                <img id="profile-image" class="rounded-circle" src="/assets/img/theme/team-4-800x800.jpg" alt="Profile Picture" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-info btn-sm" onclick="connectProfile()">Connect</button>
+            <button class="btn btn-default btn-sm float-right" onclick="messageProfile()">Message</button>
+          </div>
+        </div>
+        <div class="card-body pt-0 pt-md-4">
+          <div id="profile-info" class="text-center">
+            <h3 id="username">Loading...</h3>
+            <p id="email">Email: Loading...</p>
+            <p id="created-at">Created At: Loading...</p>
+            <p id="verified">Verified: Loading...</p>
+          </div>
+
+          <form id="update-user-form">
+            <div class="form-group">
+              <input class="form-control" id="name" placeholder="Name" type="text" />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="surname" placeholder="Surname" type="text" />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="born-date" placeholder="Born Date" type="date" />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="born-hour" placeholder="Born Hour" type="time" />
+            </div>
+            <div class="form-group">
+              <input class="form-control" id="born-place" placeholder="Born Place" type="text" />
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Update Profile</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include JS -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const token = localStorage.getItem("token");
+    const errorMessageContainer = document.getElementById("error-message");
+    const successMessageContainer = document.getElementById("success-message");
+  
+    const usernameElem = document.getElementById("username");
+    const emailElem = document.getElementById("email");
+    const createdAtElem = document.getElementById("created-at");
+    const verifiedElem = document.getElementById("verified");
+  
+    const nameInput = document.getElementById("name");
+    const surnameInput = document.getElementById("surname");
+    const bornDateInput = document.getElementById("born-date");
+    const bornHourInput = document.getElementById("born-hour");
+    const bornPlaceInput = document.getElementById("born-place");
+  
+    if (!token) {
+      errorMessageContainer.textContent = "You need to login first.";
+      return;
+    }
+  
+    // Recupera i dati sicuri
+    async function fetchSecureData() {
+      try {
+        const response = await fetch(`${window.fastapiEndpoint}/secure-data`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        const data = await response.json();
+        if (response.ok) {
+          // Aggiorna il DOM con i dati
+          usernameElem.textContent = data.username || "Loading...";
+          emailElem.textContent = `Email: ${data.email}`;
+          createdAtElem.textContent = `Created At: ${data.created_at}`;
+          verifiedElem.textContent = `Verified: ${data.is_verified ? "Yes" : "No"}`;
+        } else {
+          errorMessageContainer.textContent = data.detail || "Failed to load data";
+        }
+      } catch (err) {
+        errorMessageContainer.textContent = "Something went wrong while fetching data.";
+      }
+    }
+  
+    // Chiamata per caricare i dati quando la pagina è pronta
+    fetchSecureData();
+  
+    // Funzione per gestire l'aggiornamento del profilo
+    document.getElementById("update-user-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const name = nameInput.value;
+      const surname = surnameInput.value;
+      const bornDate = bornDateInput.value;
+      const bornHour = bornHourInput.value;
+      const bornPlace = bornPlaceInput.value;
+  
+      const formattedBornDate = bornDate.split("-").reverse().join("-"); // Converte nel formato YYYY-MM-DD
+  
+      try {
+        const response = await fetch(`${window.fastapiEndpoint}/update-user`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            surname,
+            born_date: formattedBornDate,
+            born_hour: bornHour,
+            born_place: bornPlace,
+          }),
+        });
+  
+        const data = await response.json();
+        if (response.ok) {
+          successMessageContainer.textContent = "User data updated successfully!";
+        } else {
+          errorMessageContainer.textContent = data.detail || "Something went wrong with the update.";
+        }
+      } catch (err) {
+        errorMessageContainer.textContent = "Something went wrong while updating user data.";
+      }
+    });
+  
+    // Funzioni per azioni dei bottoni (puoi personalizzarle)
+    function connectProfile() {
+      alert("Connect button clicked");
+    }
+  
+    function messageProfile() {
+      alert("Message button clicked");
+    }
+  });
+</script>
+  

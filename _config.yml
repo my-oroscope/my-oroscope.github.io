@@ -31,6 +31,8 @@ twitter_username: MyOroscope
 github_username:  MyOroscope
 snipchart: YWFiZDYzMzYtZjY3MC00ZDliLTgwNWUtMGFlY2IyOWQ0Y2Q2NjM2NDcxMTc3NTMxNjE4MDUw
 
+fastapi_endpoint: "https://api.prettyproducts.online"
+
 collections:
   products:
     output: true
