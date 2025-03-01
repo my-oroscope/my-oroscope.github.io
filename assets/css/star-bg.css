@@ -72,7 +72,7 @@
   left: 0;
 }
 
-.star-container @keyframes glow {
+@keyframes glow {
   0% {
     opacity: 0.9;
   }
@@ -84,7 +84,7 @@
   }
 }
 
-.star-container @keyframes comet {
+@keyframes comet {
   0% {
     transform: rotate(-45deg) translateX(0);
     opacity: 0.3;
