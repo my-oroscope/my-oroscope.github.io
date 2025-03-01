@@ -15,31 +15,48 @@ title: Checkout
 
 <script src="https://js.stripe.com/v3/"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const stripe = Stripe("pk_test_51QU51aEb1r0toAUQRzJWvaYMHOaa0G88WxsVV1KoWUnTR5wS9YNnC6XHBxVQTk8uwapmSiM1RDYn8cHwTEjNoVCG00l6UqosbM");
-  const errorMessage = document.getElementById("error-message");
-
-  async function handlePayment(plan) {
-    try {
-      const response = await fetch(`${window.fastapiEndpoint}/create-checkout-session`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan })
-      });
-
-      const data = await response.json();
-      if (data.sessionId) {
-        await stripe.redirectToCheckout({ sessionId: data.sessionId });
-      } else {
-        errorMessage.textContent = "Errore nella creazione della sessione di pagamento.";
+  document.addEventListener("DOMContentLoaded", function () {
+    const stripe = Stripe("pk_test_51QU51aEb1r0toAUQRzJWvaYMHOaa0G88WxsVV1KoWUnTR5wS9YNnC6XHBxVQTk8uwapmSiM1RDYn8cHwTEjNoVCG00l6UqosbM");
+    const errorMessage = document.getElementById("error-message");
+  
+    // Funzione per ottenere il token JWT (assicurati che sia presente nella tua applicazione, come localStorage o cookie)
+    const getJwtToken = () => {
+      // Qui dovresti recuperare il token, per esempio da localStorage o cookie
+      return localStorage.getItem("jwt_token");  // O usa il metodo che utilizzi per memorizzare il token
+    };
+  
+    async function handlePayment(plan) {
+      const token = getJwtToken();  // Ottieni il token JWT
+  
+      if (!token) {
+        errorMessage.textContent = "Token di autenticazione mancante.";
+        return;
       }
-    } catch (error) {
-      console.error(error);
-      errorMessage.textContent = "Errore durante il pagamento.";
+  
+      try {
+        const response = await fetch(`${window.fastapiEndpoint}/create-checkout-session`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`  // Aggiungi il token nell'header Authorization
+          },
+          body: JSON.stringify({ plan })
+        });
+  
+        const data = await response.json();
+        if (data.sessionId) {
+          await stripe.redirectToCheckout({ sessionId: data.sessionId });
+        } else {
+          errorMessage.textContent = "Errore nella creazione della sessione di pagamento.";
+        }
+      } catch (error) {
+        console.error(error);
+        errorMessage.textContent = "Errore durante il pagamento.";
+      }
     }
-  }
-
-  document.getElementById("monthly").addEventListener("click", () => handlePayment("monthly"));
-  document.getElementById("yearly").addEventListener("click", () => handlePayment("yearly"));
-});
+  
+    document.getElementById("monthly").addEventListener("click", () => handlePayment("monthly"));
+    document.getElementById("yearly").addEventListener("click", () => handlePayment("yearly"));
+  });
 </script>
+  
