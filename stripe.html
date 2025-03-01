@@ -19,10 +19,10 @@ title: Checkout
     const stripe = Stripe("pk_test_51QU51aEb1r0toAUQRzJWvaYMHOaa0G88WxsVV1KoWUnTR5wS9YNnC6XHBxVQTk8uwapmSiM1RDYn8cHwTEjNoVCG00l6UqosbM");
     const errorMessage = document.getElementById("error-message");
   
-    // Funzione per ottenere il token JWT (assicurati che sia presente nella tua applicazione, come localStorage o cookie)
+    // Funzione per ottenere il token JWT
     const getJwtToken = () => {
-      // Qui dovresti recuperare il token, per esempio da localStorage o cookie
-      return localStorage.getItem("jwt_token");  // O usa il metodo che utilizzi per memorizzare il token
+      // Recupera il token JWT da localStorage
+      return localStorage.getItem("token");  // Assicurati che il token sia memorizzato in 'token'
     };
   
     async function handlePayment(plan) {
@@ -59,4 +59,5 @@ title: Checkout
     document.getElementById("yearly").addEventListener("click", () => handlePayment("yearly"));
   });
 </script>
+
   
