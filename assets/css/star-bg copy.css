@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200&family=Pompiere&family=Source+Sans+Pro:wght@300&family=Text+Me+One&display=swap");
 
-.star-container {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -10,7 +11,7 @@
   overflow: hidden;
 }
 
-.star-container .star {
+.star {
   width: 3px;
   height: 3px;
   border-radius: 50%;
@@ -24,7 +25,7 @@
   animation: glow 5s infinite;
 }
 
-.star-container .star--medium {
+.star--medium {
   width: 6px;
   height: 6px;
   background-image: radial-gradient(
@@ -34,9 +35,10 @@
   );
 }
 
-.star-container .star--big {
+.star--big {
   width: 9px;
   height: 9px;
+
   background-image: radial-gradient(
     circle 1158px at 6.4% 48.8%,
     rgba(195, 241, 245, 1) 0%,
@@ -45,7 +47,7 @@
   box-shadow: 0 0 40px 0 #edcda3, 0 0 20px 0 #ffffff, inset 0 0 4px #ffffff;
 }
 
-.star-container .comet {
+.comet {
   width: 5px;
   height: 5px;
   background-image: radial-gradient(
@@ -60,7 +62,7 @@
   animation: comet 50s infinite;
 }
 
-.star-container .comet::after {
+.comet::after {
   content: "";
   width: 10vw;
   height: 4px;
@@ -72,30 +74,35 @@
   left: 0;
 }
 
-.star-container @keyframes glow {
+@keyframes glow {
   0% {
     opacity: 0.9;
   }
+
   50% {
     opacity: 0.2;
   }
+
   100% {
     opacity: 0.9;
   }
 }
 
-.star-container @keyframes comet {
+@keyframes comet {
   0% {
     transform: rotate(-45deg) translateX(0);
     opacity: 0.3;
   }
+
   10% {
     opacity: 1;
   }
+
   20% {
     transform: rotate(-45deg) translateX(-100vw);
     opacity: 0;
   }
+
   100% {
     transform: rotate(-45deg) translateX(-100vw);
     opacity: 0;
@@ -103,20 +110,20 @@
 }
 
 @media screen and (min-width: 40em) {
-  .star-container .container {
+  .container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
   }
 }
 
-.star-container img {
+img {
   width: 190px;
   height: 200px;
   margin-top: 7rem;
 }
 
-.star-container h3 {
+h3 {
   color: #f7fefe;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #eafaa0, 0 0 30px #eafaa0,
     0 0 40px #eafaa0, 0 0 55px #eafaa0, 0 0 75px #eafaa0;
@@ -124,24 +131,61 @@
   font-size: 1.3rem;
 }
 
-.star-container h4 {
+h4 {
   color: #fff;
   font-size: 1.2rem;
   font-family: "Josefin Sans", sans-serif;
   text-decoration: underline;
 }
 
-.star-container p {
+p {
   color: #99e4ed;
   font-size: 1.1rem;
   font-family: "Source Sans Pro", sans-serif;
   text-shadow: 2px 2px 5px #99e4ed;
 }
 
-.star-container .container {
+.container {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   flex-direction: row;
   max-height: 100vh;
 }
+/*
+.flip-card {
+  background-color: transparent;
+  width: 200px;
+  height: 400px;
+  margin: 1rem;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(25, 25, 25, 0.5);
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  margin-top: 4rem;
+}
+*/
