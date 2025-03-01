@@ -1,4 +1,4 @@
-.star-container {
+/*.star-container {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -6,7 +6,21 @@
   background-image: linear-gradient(to right, #1c2129 0%, #101318 100%);
   position: relative;
   overflow: visible;
+}*/
+
+.star-container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(to right, #1c2129 0%, #101318 100%);
+  position: fixed; /* Imposta il contenitore come fisso al top della pagina */
+  top: 0;
+  left: 0;
+  overflow: visible;
+  z-index: -1; /* Assicurati che stia sotto altri contenuti, se necessario */
 }
+
 
 .star-container .star {
   width: 3px;
