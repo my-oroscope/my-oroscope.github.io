@@ -1,9 +1,7 @@
 var wH = window.innerHeight;
 var wW = window.innerWidth;
 var domBody = document.body;
-var starContainer = document.querySelector('.star-container'); // Aggiungi questa riga per selezionare il contenitore
 
-// Prima parte: creazione delle comete
 (function (n) {
   var leftArr = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 60, 65, 70, 75, 80];
   var delayArr = [
@@ -47,11 +45,10 @@ var starContainer = document.querySelector('.star-container'); // Aggiungi quest
       "style",
       "left:" + leftEle + "%;animation-delay:" + delayEle + "ms;"
     );
-    starContainer.appendChild(div); // Inserisci le comete nel contenitore
+    domBody.appendChild(div);
   }
 })(25);
 
-// Seconda parte: creazione delle stelle
 (function (n) {
   for (var i = 0; i < n; i++) {
     var div = document.createElement("div");
@@ -74,6 +71,6 @@ var starContainer = document.querySelector('.star-container'); // Aggiungi quest
         Math.round(Math.random() * 3000) +
         "ms;"
     );
-    starContainer.appendChild(div); // Inserisci le stelle nel contenitore
+    domBody.appendChild(div);
   }
 })(150);
